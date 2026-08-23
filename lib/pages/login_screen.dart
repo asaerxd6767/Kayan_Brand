@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:local_brand/core/theme/app_color.dart';
 import 'package:local_brand/core/theme/app_spacing.dart';
-import 'package:local_brand/core/theme/app_theme.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});

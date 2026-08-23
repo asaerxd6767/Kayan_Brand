@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:local_brand/core/theme/app_color.dart';
-import 'package:local_brand/core/theme/app_theme.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -9,7 +8,7 @@ class SplashScreen extends StatelessWidget {
     var textTheme = Theme.of(context).textTheme;
     return Scaffold(
       backgroundColor: KayanColors.deepOnyx,
-      body: Container(
+      body: SizedBox(
         width: double.infinity,
         child: Column(
           mainAxisAlignment: .center,
