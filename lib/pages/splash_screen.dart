@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:local_brand/core/theme/app_color.dart';
+import '../core/theme/app_color.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
   @override
   Widget build(BuildContext context) {
-    var textTheme = Theme.of(context).textTheme;
+    final textTheme = Theme.of(context).textTheme;
+    final colorTheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       backgroundColor: KayanColors.deepOnyx,
       body: SizedBox(
@@ -16,12 +18,13 @@ class SplashScreen extends StatelessWidget {
             Text(
               'KAYAN',
               style: textTheme.headlineLarge?.copyWith(
-                color: KayanColors.warmCream
+                color: colorTheme.secondary,
               ),
             ),
-            Text('Couture for the Modern Soul', style: textTheme.bodyMedium?.copyWith(
-              color: KayanColors.outline
-            ),),
+            Text(
+              'Couture for the Modern Soul',
+              style: textTheme.bodyMedium?.copyWith(color: colorTheme.outline),
+            ),
           ],
         ),
       ),

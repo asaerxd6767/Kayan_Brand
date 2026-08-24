@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:local_brand/core/theme/app_color.dart';
 import 'package:local_brand/core/theme/app_spacing.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -8,6 +7,8 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final colorTheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -27,22 +28,26 @@ class LoginScreen extends StatelessWidget {
                   Text(
                     'Enter your details to access your curated collection.',
                     style: textTheme.headlineSmall?.copyWith(
-                      color: KayanColors.outline,
+                      color: colorTheme.outline,
                     ),
                   ),
                 ],
               ),
 
-              // Text fields
+              // ----------- Text fields
               Form(
                 child: Column(
                   spacing: KayanSpacing.md,
                   children: [
                     TextFormField(
-                      decoration: InputDecoration(hintText: 'Email or Phone'),
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Email or Phone',
+                      ),
                     ),
                     TextFormField(
                       decoration: InputDecoration(
+                        border: OutlineInputBorder(),
                         hintText: 'Password',
                         suffix: TextButton(
                           onPressed: () {},
@@ -53,17 +58,9 @@ class LoginScreen extends StatelessWidget {
 
                     SizedBox(
                       width: double.infinity,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: KayanColors.primary,
-                        ),
+                      child: OutlinedButton(
                         onPressed: () {},
-                        child: Text(
-                          'LOGIN',
-                          style: textTheme.bodyLarge?.copyWith(
-                            color: KayanColors.onPrimary,
-                          ),
-                        ),
+                        child: const Text('LOGIN'),
                       ),
                     ),
 
@@ -73,10 +70,13 @@ class LoginScreen extends StatelessWidget {
                         Text(
                           "Don't have an account?",
                           style: textTheme.bodyMedium?.copyWith(
-                            color: KayanColors.outline
+                            color: colorTheme.outline,
                           ),
                         ),
-                        TextButton(onPressed: () {}, child: Text('Sign Up', style: textTheme.bodyMedium,)),
+                        TextButton(
+                          onPressed: () {},
+                          child: Text('Sign Up', style: textTheme.bodyMedium),
+                        ),
                       ],
                     ),
                   ],

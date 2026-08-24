@@ -55,7 +55,8 @@ class KayanTheme {
       // Outlined Buttons Theme Configuration
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: KayanColors.deepOnyx,
+          foregroundColor: KayanColors.outlineVariant,
+          backgroundColor: KayanColors.deepOnyx,
           side: const BorderSide(color: KayanColors.deepOnyx, width: 1),
           shape: RoundedRectangleBorder(borderRadius: KayanRadius.borderLg),
           textStyle: KayanTypography.buttonText,

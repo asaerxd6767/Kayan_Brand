@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:local_brand/core/theme/app_color.dart';
 
 class MyTextField extends StatelessWidget {
   final String hintText;
@@ -14,11 +13,14 @@ class MyTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+    
     return TextFormField(
       obscureText: isPassword,
       decoration: InputDecoration(
+        border: OutlineInputBorder(),
         hintText: hintText,
-        hintStyle: textTheme.bodyMedium?.copyWith(color: KayanColors.outline),
+        hintStyle: textTheme.bodyMedium?.copyWith(color: colorScheme.outline),
       ),
     );
   }

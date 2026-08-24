@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:local_brand/core/theme/app_color.dart';
 import 'package:local_brand/core/theme/app_spacing.dart';
 import 'package:local_brand/widgets/category_card.dart';
 
@@ -57,6 +56,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final colorTheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
         leading: const Icon(Icons.menu, size: 20),
@@ -78,18 +78,18 @@ class HomeScreen extends StatelessWidget {
                 // Search bar
                 TextFormField(
                   style: textTheme.bodyMedium?.copyWith(
-                    color: KayanColors.onSurface,
+                    color: colorTheme.onSurface,
                   ),
                   decoration: InputDecoration(
                     hintText: 'Search Collection',
                     hintStyle: textTheme.bodyMedium?.copyWith(
-                      color: KayanColors.outline,
+                      color: colorTheme.outline,
                     ),
                     prefixIcon: Icon(Icons.search),
 
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: KayanColors.deepOnyx,
+                        color: colorTheme.primary,
                         width: 2,
                       ),
                     ),
