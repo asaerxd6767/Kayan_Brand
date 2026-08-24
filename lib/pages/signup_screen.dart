@@ -9,6 +9,14 @@ class SignupScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final colorTheme = Theme.of(context).colorScheme;
+
+    final List<String> sizes = [
+      'XS',
+      'S',
+      'M',
+      'L',
+      'XL'
+    ];
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -39,7 +47,7 @@ class SignupScreen extends StatelessWidget {
               // Form
               Form(
                 child: Column(
-                  spacing: KayanSpacing.sm,
+                  spacing: KayanSpacing.md,
                   crossAxisAlignment: .stretch,
                   children: [
                     MyTextField(hintText: 'Full name'),
@@ -47,7 +55,25 @@ class SignupScreen extends StatelessWidget {
                     MyTextField(hintText: 'Phone Number'),
                     MyTextField(hintText: 'Password', isPassword: true),
                     MyTextField(hintText: 'Confirm Password', isPassword: true),
-                    ElevatedButton(onPressed: () {}, child: Text('SIGN UP'))
+
+                    Text('Size Preference (Optional)', style: textTheme.bodySmall,),
+                    SingleChildScrollView(
+                      scrollDirection: .horizontal,
+                      child: Row(
+                        spacing: KayanSpacing.sm,
+                        children:
+                      sizes.map((e) => OutlinedButton(onPressed: () {}, child: Text(e)),).toList(),
+                      ),
+                    ),
+                    ElevatedButton(onPressed: () {}, child: Text('SIGN UP')),
+
+                    Row(
+                      mainAxisAlignment: .center,
+                      children: [
+                        Text('Already have an account?', style: textTheme.bodySmall,),
+                        TextButton(onPressed: () {}, child: Text('Login', style: textTheme.labelLarge,))
+                      ],
+                    ),
                   ],
                 ),
               ),
