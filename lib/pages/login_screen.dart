@@ -1,8 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:local_brand/core/theme/app_spacing.dart';
+import 'package:local_brand/core/utils/app_validators.dart';
+import 'package:local_brand/pages/signup_screen.dart';
+import 'package:local_brand/widgets/form_field.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+
+  final TextEditingController _emailcontroller = TextEditingController();
+  final TextEditingController _passwordcontroller = TextEditingController();
+  @override
+  void dispose() {
+    _emailcontroller.dispose();
+    _passwordcontroller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,32 +53,35 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
 
-              // ----------- Text fields
               Form(
+                key: _formKey,
+              // ----------- Text fields
                 child: Column(
                   spacing: KayanSpacing.md,
                   children: [
-                    TextFormField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Email or Phone',
-                      ),
+                    MyTextField(
+                      hintText: 'Email',
+                      validate: AppValidator.validateEmail,
+                      controller: _emailcontroller,
                     ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Password',
-                        suffix: TextButton(
-                          onPressed: () {},
-                          child: Text("Forgot?"),
-                        ),
+                    MyTextField(
+                      hintText: 'Password',
+                      validate: AppValidator.validatePassword,
+                      controller: _passwordcontroller,
+                      suffix: TextButton(
+                        onPressed: () {},
+                        child: Text('Forgot?'),
                       ),
                     ),
 
                     SizedBox(
                       width: double.infinity,
                       child: OutlinedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          if(_formKey.currentState!.validate()) {
+                            print('data is clear');
+                          }
+                        },
                         child: const Text('LOGIN'),
                       ),
                     ),
@@ -74,7 +96,14 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const SignupScreen(),
+                              ),
+                            );
+                          },
                           child: Text('Sign Up', style: textTheme.bodyMedium),
                         ),
                       ],

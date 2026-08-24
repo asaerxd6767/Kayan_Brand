@@ -1,22 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:local_brand/core/theme/app_spacing.dart';
+import 'package:local_brand/core/utils/app_validators.dart';
+import 'package:local_brand/core/utils/extenstions/capitalized.dart';
+import 'package:local_brand/pages/login_screen.dart';
 import '../widgets/form_field.dart';
 
-class SignupScreen extends StatelessWidget {
+class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
+
+  @override
+  State<SignupScreen> createState() => _SignupScreenState();
+}
+
+class _SignupScreenState extends State<SignupScreen> {
+  final _key = GlobalKey<FormState>();
+
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmpasswordController =
+      TextEditingController();
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _passwordController.dispose();
+    _confirmpasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final colorTheme = Theme.of(context).colorScheme;
 
-    final List<String> sizes = [
-      'XS',
-      'S',
-      'M',
-      'L',
-      'XL'
-    ];
+    final List<String> sizes = ['xs', 's', 'm', 'l', 'xl'];
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -31,7 +53,7 @@ class SignupScreen extends StatelessWidget {
             children: [
               // Headline
               Text(
-                'Create Account',
+                'create account'.toCapitalized(),
                 style: textTheme.headlineLarge?.copyWith(
                   color: colorTheme.primary,
                 ),
@@ -46,32 +68,84 @@ class SignupScreen extends StatelessWidget {
 
               // Form
               Form(
+                key: _key,
                 child: Column(
                   spacing: KayanSpacing.md,
                   crossAxisAlignment: .stretch,
                   children: [
-                    MyTextField(hintText: 'Full name'),
-                    MyTextField(hintText: 'Email Address'),
-                    MyTextField(hintText: 'Phone Number'),
-                    MyTextField(hintText: 'Password', isPassword: true),
-                    MyTextField(hintText: 'Confirm Password', isPassword: true),
+                    MyTextField(
+                      hintText: 'Full name',
+                      validate: AppValidator.validateName,
+                      controller: _nameController,
+                    ),
+                    MyTextField(
+                      hintText: 'Email Address',
+                      validate: AppValidator.validateEmail,
+                      controller: _emailController,
+                    ),
+                    MyTextField(
+                      hintText: 'Phone Number',
+                      validate: AppValidator.validatePhone,
+                      controller: _phoneController,
+                    ),
+                    MyTextField(
+                      hintText: 'Password',
+                      isPassword: true,
+                      validate: AppValidator.validatePassword,
+                      controller: _passwordController,
+                    ),
+                    MyTextField(
+                      hintText: 'Confirm Password',
+                      isPassword: true,
+                      validate:(value) =>  AppValidator.validateConfirmPassword(value, _passwordController.text),
+                      controller: _confirmpasswordController,
+                    ),
 
-                    Text('Size Preference (Optional)', style: textTheme.bodySmall,),
+                    Text(
+                      'Size Preference (Optional)',
+                      style: textTheme.bodySmall,
+                    ),
                     SingleChildScrollView(
                       scrollDirection: .horizontal,
                       child: Row(
                         spacing: KayanSpacing.sm,
-                        children:
-                      sizes.map((e) => OutlinedButton(onPressed: () {}, child: Text(e)),).toList(),
+                        children: sizes
+                            .map(
+                              (e) => OutlinedButton(
+                                onPressed: () {},
+                                child: Text(e.toUpperCase()),
+                              ),
+                            )
+                            .toList(),
                       ),
                     ),
-                    ElevatedButton(onPressed: () {}, child: Text('SIGN UP')),
+                    ElevatedButton(
+                      onPressed: () {
+                        if (_key.currentState!.validate()) {
+                          print('Data is clear');
+                        }
+                      },
+                      child: Text('SIGN UP'),
+                    ),
 
                     Row(
                       mainAxisAlignment: .center,
                       children: [
-                        Text('Already have an account?', style: textTheme.bodySmall,),
-                        TextButton(onPressed: () {}, child: Text('Login', style: textTheme.labelLarge,))
+                        Text(
+                          'Already have an account?',
+                          style: textTheme.bodySmall,
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LoginScreen(),
+                              ),
+                            );
+                          },
+                          child: Text('Login', style: textTheme.labelLarge),
+                        ),
                       ],
                     ),
                   ],
