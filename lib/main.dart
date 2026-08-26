@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:local_brand/core/theme/app_theme.dart';
-import 'package:local_brand/pages/home_screen.dart';
+import 'pages/home_screen.dart';
 import 'pages/splash_screen.dart';
 
 void main() {
@@ -15,7 +15,7 @@ class KayanApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: KayanTheme.lightTheme,
-      home: SplashScreen(),
+      home: HomeScreen(),
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:local_brand/core/utils/extenstions/capitalized.dart';
 import 'package:local_brand/pages/login_screen.dart';
 import '../core/theme/app_color.dart';
 
