@@ -3,6 +3,7 @@ import 'package:local_brand/core/widgets/nav_bar.dart';
 import 'package:local_brand/core/widgets/nav_item.dart';
 import 'package:local_brand/pages/home_screen.dart';
 
+import 'core/routing/routes.dart';
 import 'core/widgets/app_bar.dart';
 
 /*
@@ -23,6 +24,7 @@ class _HomeLayoutState extends State<HomeLayout> {
   final List<Widget> _pages = [HomeScreen(), const Placeholder()];
   @override
   Widget build(BuildContext context) {
+    final colorTheme = Theme.of(context).colorScheme;
     final List<Widget> list = [
       // home
       KayanNavItem(
@@ -50,6 +52,13 @@ class _HomeLayoutState extends State<HomeLayout> {
       body: _pages[_selectedIndex],
 
       bottomNavigationBar: KayanGlassNavigationBar(items: list),
+      floatingActionButton: FloatingActionButton(
+    backgroundColor: colorTheme.primary,
+    child:  Icon(Icons.add, color: colorTheme.onPrimary),
+    onPressed: () {
+      Navigator.pushNamed(context, Routes.addProduct);
+    },
+  ),
     );
   }
 }
