@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:local_brand/core/utils/extenstions/capitalized.dart';
 
 class MyTextField extends StatelessWidget {
   final String hintText;
@@ -6,13 +7,14 @@ class MyTextField extends StatelessWidget {
   final Widget? suffix;
   final Widget? prefixIcon;
   final TextEditingController? controller;
+  final int? maxLines;
 
   final bool isPassword;
 
   const MyTextField({
     super.key,
     required this.hintText,
-    this.isPassword = false,  this.validate, this.suffix, this.controller, this.prefixIcon,
+    this.isPassword = false,  this.validate, this.suffix, this.controller, this.prefixIcon, this.maxLines,
   });
 
   @override
@@ -26,11 +28,11 @@ class MyTextField extends StatelessWidget {
       decoration: InputDecoration(
         prefixIcon: prefixIcon,
         border: const OutlineInputBorder(),
-        hintText: hintText,
+        hintText: hintText.toCapitalized(),
         hintStyle: textTheme.bodyMedium?.copyWith(color: colorScheme.outline),
         suffix: suffix,
       ),
-
+      maxLines: maxLines,
       validator: validate,
     );
   }

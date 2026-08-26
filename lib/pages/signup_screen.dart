@@ -3,6 +3,7 @@ import 'package:local_brand/core/theme/app_spacing.dart';
 import 'package:local_brand/core/utils/app_validators.dart';
 import 'package:local_brand/core/utils/extenstions/capitalized.dart';
 import 'package:local_brand/pages/login_screen.dart';
+import '../core/routing/routes.dart';
 import '../widgets/form_field.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -125,7 +126,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     ElevatedButton(
                       onPressed: () {
                         if (_key.currentState!.validate()) {
-                          print('Data is clear');
+                          // TODO: Implement Auth here
+                          if(!context.mounted) return;
+                          Navigator.pushReplacementNamed(context, Routes.home);
                         }
                       },
                       child: Text('SIGN UP'),
