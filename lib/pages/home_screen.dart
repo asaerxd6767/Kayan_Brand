@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:local_brand/core/theme/app_spacing.dart';
 import 'package:local_brand/widgets/category_card.dart';
+import 'package:local_brand/widgets/form_field.dart';
+
+import '../core/widgets/app_bar.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -56,16 +59,10 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final colorTheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(
-        leading: const Icon(Icons.menu, size: 20),
-        centerTitle: true,
-        title: Text('KAYAN', style: textTheme.headlineLarge),
-        actions: [
-          const Icon(Icons.shopping_bag_outlined, size: 20),
-          const Icon(Icons.person_2_outlined, size: 20),
-        ],
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: KayanAppBar(textTheme: textTheme),
       ),
 
       body: SingleChildScrollView(
@@ -76,24 +73,9 @@ class HomeScreen extends StatelessWidget {
               spacing: KayanSpacing.md,
               children: [
                 // Search bar
-                TextFormField(
-                  style: textTheme.bodyMedium?.copyWith(
-                    color: colorTheme.onSurface,
-                  ),
-                  decoration: InputDecoration(
-                    hintText: 'Search Collection',
-                    hintStyle: textTheme.bodyMedium?.copyWith(
-                      color: colorTheme.outline,
-                    ),
-                    prefixIcon: Icon(Icons.search),
-
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: colorTheme.primary,
-                        width: 2,
-                      ),
-                    ),
-                  ),
+                MyTextField(
+                  hintText: 'Search Collection',
+                  prefixIcon: Icon(Icons.search),
                 ),
 
                 // Categories

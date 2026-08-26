@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class MyTextField extends StatelessWidget {
   final String hintText;
-  final String? Function(String?) validate;
+  final String? Function(String?)? validate;
   final Widget? suffix;
+  final Widget? prefixIcon;
   final TextEditingController? controller;
 
   final bool isPassword;
@@ -11,7 +12,7 @@ class MyTextField extends StatelessWidget {
   const MyTextField({
     super.key,
     required this.hintText,
-    this.isPassword = false, required this.validate, this.suffix, this.controller,
+    this.isPassword = false,  this.validate, this.suffix, this.controller, this.prefixIcon,
   });
 
   @override
@@ -23,13 +24,14 @@ class MyTextField extends StatelessWidget {
       controller: controller,
       obscureText: isPassword,
       decoration: InputDecoration(
+        prefixIcon: prefixIcon,
         border: const OutlineInputBorder(),
         hintText: hintText,
         hintStyle: textTheme.bodyMedium?.copyWith(color: colorScheme.outline),
         suffix: suffix,
       ),
 
-      validator: (e) => validate(e),
+      validator: validate,
     );
   }
 }

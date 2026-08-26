@@ -97,7 +97,10 @@ class _SignupScreenState extends State<SignupScreen> {
                     MyTextField(
                       hintText: 'Confirm Password',
                       isPassword: true,
-                      validate:(value) =>  AppValidator.validateConfirmPassword(value, _passwordController.text),
+                      validate: (value) => AppValidator.validateConfirmPassword(
+                        value,
+                        _passwordController.text,
+                      ),
                       controller: _confirmpasswordController,
                     ),
 
