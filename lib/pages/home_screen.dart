@@ -3,8 +3,6 @@ import 'package:local_brand/core/theme/app_spacing.dart';
 import 'package:local_brand/widgets/category_card.dart';
 import 'package:local_brand/widgets/form_field.dart';
 
-import '../core/widgets/app_bar.dart';
-
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
@@ -55,67 +53,59 @@ class HomeScreen extends StatelessWidget {
           'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000&auto=format&fit=crop',
     },
   ];
-
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight),
-        child: KayanAppBar(textTheme: textTheme),
-      ),
+    return SingleChildScrollView(
+      child: Container(
+        margin: EdgeInsets.all(KayanSpacing.containerMargin),
+        child: Form(
+          child: Column(
+            spacing: KayanSpacing.md,
+            children: [
+              // Search bar
+              MyTextField(
+                hintText: 'Search Collection',
+                prefixIcon: Icon(Icons.search),
+              ),
 
-      body: SingleChildScrollView(
-        child: Container(
-          margin: EdgeInsets.all(KayanSpacing.containerMargin),
-          child: Form(
-            child: Column(
-              spacing: KayanSpacing.md,
-              children: [
-                // Search bar
-                MyTextField(
-                  hintText: 'Search Collection',
-                  prefixIcon: Icon(Icons.search),
-                ),
-
-                // Categories
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    spacing: KayanSpacing.sm,
-                    children: categories
-                        .map(
-                          (category) => Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 5,
-                              vertical: 10,
-                            ),
-                            child: Text(category, style: textTheme.labelLarge),
-                          ),
-                        )
-                        .toList(),
-                  ),
-                ),
-
-                // Cards
-                Column(
-                  spacing: KayanSpacing.md,
-                  children: products
+              // Categories
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  spacing: KayanSpacing.sm,
+                  children: categories
                       .map(
-                        (element) => CategoryCard(
-                          categoryName: element['name'],
-                          categoryType: element['category'],
-                          imageUrl: element['image'],
-                          price: element['price'],
+                        (category) => Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 5,
+                            vertical: 10,
+                          ),
+                          child: Text(category, style: textTheme.labelLarge),
                         ),
                       )
                       .toList(),
                 ),
-              ],
-            ),
+              ),
+
+              // Cards
+              Column(
+                spacing: KayanSpacing.md,
+                children: products
+                    .map(
+                      (element) => CategoryCard(
+                        categoryName: element['name'],
+                        categoryType: element['category'],
+                        imageUrl: element['image'],
+                        price: element['price'],
+                      ),
+                    )
+                    .toList(),
+              ),
+            ],
           ),
-          // Categories
         ),
+        // Categories
       ),
     );
   }

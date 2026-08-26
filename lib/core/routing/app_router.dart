@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:local_brand/home.dart';
 import 'package:local_brand/pages/add_product_screen.dart';
-import 'package:local_brand/pages/home_screen.dart';
 import 'package:local_brand/pages/login_screen.dart';
 import 'package:local_brand/pages/signup_screen.dart';
 import 'package:local_brand/pages/splash_screen.dart';
@@ -16,19 +16,19 @@ class AppRouter {
         return MaterialPageRoute(builder: (context) => const SplashScreen());
 
       case Routes.login:
-        return MaterialPageRoute(builder: (context) => LoginScreen(),);
+        return MaterialPageRoute(builder: (context) => const LoginScreen(),);
 
       case Routes.signup:
-        return MaterialPageRoute(builder: (context) => SignupScreen(),);
+        return MaterialPageRoute(builder: (context) => const SignupScreen(),);
 
       case Routes.home:
-        return MaterialPageRoute(builder: (context) => HomeScreen(),);
+        return MaterialPageRoute(builder: (context) => const HomeLayout(),);
 
       case Routes.addProduct:
-        return MaterialPageRoute(builder: (context) => AddProductScreen());
+        return MaterialPageRoute(builder: (context) => const AddProductScreen());
 
       default:
-        return MaterialPageRoute(builder: (context) => Scaffold(
+        return MaterialPageRoute(builder: (context) => const Scaffold(
           body: Text('No page here'),
         ),);
 

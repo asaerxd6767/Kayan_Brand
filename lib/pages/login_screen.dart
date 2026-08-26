@@ -7,7 +7,7 @@ import 'package:local_brand/widgets/form_field.dart';
 import '../core/routing/routes.dart';
 
 class LoginScreen extends StatefulWidget {
-  LoginScreen({super.key});
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
