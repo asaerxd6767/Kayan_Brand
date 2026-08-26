@@ -22,15 +22,15 @@ class KayanGlassNavigationBar extends StatelessWidget {
             height: 64,
             padding: const EdgeInsets.symmetric(horizontal: KayanSpacing.md),
             decoration: BoxDecoration(
-              color: KayanColors.warmCream.withOpacity(0.65),
+              color: KayanColors.warmCream,
               borderRadius: BorderRadius.circular(KayanRadius.xl),
               border: Border.all(
-                color: KayanColors.deepOnyx.withOpacity(0.1),
+                color: KayanColors.deepOnyx,
                 width: 1,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: KayanColors.deepOnyx.withOpacity(0.15),
+                  color: KayanColors.deepOnyx,
                   blurRadius: 30,
                   offset: const Offset(0, 10),
                 ),

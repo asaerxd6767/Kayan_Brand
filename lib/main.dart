@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:local_brand/core/routing/app_router.dart';
 import 'package:local_brand/core/theme/app_theme.dart';
 import 'core/routing/routes.dart';
-import 'pages/add_product_screen.dart';
 
 void main() {
   runApp(const KayanApp());
@@ -16,9 +15,8 @@ class KayanApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: KayanTheme.lightTheme,
-      // initialRoute: Routes.splash,
-      // onGenerateRoute: AppRouter().generateRoute,
-      home: AddProductScreen(),
+      initialRoute: Routes.splash,
+      onGenerateRoute: AppRouter().generateRoute,
     );
   }
 }
