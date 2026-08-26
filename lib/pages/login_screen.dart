@@ -4,6 +4,8 @@ import 'package:local_brand/core/utils/app_validators.dart';
 import 'package:local_brand/pages/signup_screen.dart';
 import 'package:local_brand/widgets/form_field.dart';
 
+import '../core/routing/routes.dart';
+
 class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
 
@@ -79,7 +81,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: OutlinedButton(
                         onPressed: () {
                           if(_formKey.currentState!.validate()) {
-                            print('data is clear');
+                            // TODO: Implement Auth here
+                          if(!context.mounted) return;
+
+                            Navigator.pushReplacementNamed(context, Routes.home);
                           }
                         },
                         child: const Text('LOGIN'),
