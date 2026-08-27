@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:local_brand/home.dart';
+import 'package:local_brand/models/product_model.dart';
 import 'package:local_brand/pages/add_product_screen.dart';
 import 'package:local_brand/pages/login_screen.dart';
+import 'package:local_brand/pages/product_details.dart';
 import 'package:local_brand/pages/signup_screen.dart';
 import 'package:local_brand/pages/splash_screen.dart';
 import 'routes.dart';
@@ -11,27 +13,38 @@ class AppRouter {
     // I will use this to pass the arguments in the future screens
     final argument = settings.arguments;
 
-    switch(settings.name) {
+    switch (settings.name) {
       case Routes.splash:
         return MaterialPageRoute(builder: (context) => const SplashScreen());
 
       case Routes.login:
-        return MaterialPageRoute(builder: (context) => const LoginScreen(),);
+        return MaterialPageRoute(builder: (context) => const LoginScreen());
 
       case Routes.signup:
-        return MaterialPageRoute(builder: (context) => const SignupScreen(),);
+        return MaterialPageRoute(builder: (context) => const SignupScreen());
 
       case Routes.home:
-        return MaterialPageRoute(builder: (context) => const HomeLayout(),);
+        return MaterialPageRoute(builder: (context) => const HomeLayout());
 
       case Routes.addProduct:
-        return MaterialPageRoute(builder: (context) => const AddProductScreen());
+        return MaterialPageRoute(
+          builder: (context) => const AddProductScreen(),
+        );
+
+      case Routes.productDetails:
+        final product = argument as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (context) => ProductDetails(
+            product: product['product'],
+            isFavorite: product['isFavorite'],
+            onFavoriteTap: product['onFavoriteTap'],
+          ),
+        );
 
       default:
-        return MaterialPageRoute(builder: (context) => const Scaffold(
-          body: Text('No page here'),
-        ),);
-
+        return MaterialPageRoute(
+          builder: (context) => const Scaffold(body: Text('No page here')),
+        );
     }
   }
 }
