@@ -3,9 +3,17 @@ import 'package:local_brand/core/theme/app_spacing.dart';
 import 'package:local_brand/widgets/category_card.dart';
 import 'package:local_brand/widgets/form_field.dart';
 
-class HomeScreen extends StatelessWidget {
+import '../core/routing/routes.dart';
+import '../models/product_model.dart';
+
+class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   final List<String> categories = [
     'New Arrivals',
     'Men',
@@ -16,43 +24,18 @@ class HomeScreen extends StatelessWidget {
     'Footwear',
     'Limited Edition',
   ];
-  final List<Map<String, dynamic>> products = [
-    {
-      'name': 'Structured Overcoat',
-      'category': 'Outerwear',
-      'price': 895,
-      'image':
-          'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=1000&auto=format&fit=crop',
-    },
-    {
-      'name': 'Oversized Cotton Hoodie',
-      'category': 'Streetwear',
-      'price': 320,
-      'image':
-          'https://images.unsplash.com/photo-1556905055-8f358a7a47b2?q=80&w=1000&auto=format&fit=crop',
-    },
-    {
-      'name': 'Tailored Wool Trousers',
-      'category': 'Men',
-      'price': 450,
-      'image':
-          'https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?q=80&w=1000&auto=format&fit=crop',
-    },
-    {
-      'name': 'Minimalist Leather Bag',
-      'category': 'Accessories',
-      'price': 680,
-      'image':
-          'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=1000&auto=format&fit=crop',
-    },
-    {
-      'name': 'Double-Breasted Blazer',
-      'category': 'Women',
-      'price': 790,
-      'image':
-          'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000&auto=format&fit=crop',
-    },
-  ];
+  void onFavoriteTap(int index) {
+    setState(() {
+      if (favoriteProducts.contains(index)) {
+        favoriteProducts.remove(index);
+      } else {
+        favoriteProducts.add(index);
+      }
+    });
+  }
+
+  final Set<int> favoriteProducts = <int>{};
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -89,18 +72,33 @@ class HomeScreen extends StatelessWidget {
               ),
 
               // Cards
-              Column(
-                spacing: KayanSpacing.md,
-                children: products
-                    .map(
-                      (element) => CategoryCard(
-                        categoryName: element['name'],
-                        categoryType: element['category'],
-                        imageUrl: element['image'],
-                        price: element['price'],
-                      ),
-                    )
-                    .toList(),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: dummyProducts.length,
+                itemBuilder: (context, index) {
+                  final isFavorite = favoriteProducts.contains(index);
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        Routes.productDetails,
+                        arguments: 
+                        {
+                          'product': dummyProducts[index],
+                          'isFavorite': isFavorite,
+                          'onFavoriteTap': () => onFavoriteTap(index)
+                        }
+        
+                      );
+                    },
+                    child: CategoryCard(
+                      product: dummyProducts[index],
+                      onFavoriteTap: () => onFavoriteTap(index),
+                      isFavorite: isFavorite,
+                    ),
+                  );
+                },
               ),
             ],
           ),

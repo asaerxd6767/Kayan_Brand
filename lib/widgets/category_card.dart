@@ -1,47 +1,68 @@
 import 'package:flutter/material.dart';
 import 'package:local_brand/core/theme/app_spacing.dart';
+import 'package:local_brand/models/product_model.dart';
 
 class CategoryCard extends StatelessWidget {
-  final String categoryName;
-  final String categoryType;
-  final String imageUrl;
-  final int price;
-  const CategoryCard({super.key, required this.categoryName, required this.categoryType, required this.imageUrl, required this.price});
+  final ProductModel product;
+  final bool isFavorite;
+  final VoidCallback onFavoriteTap;
+  const CategoryCard({
+    super.key,
+    required this.product,
+    required this.isFavorite,
+    required this.onFavoriteTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
-    return               Column(
-                crossAxisAlignment: .start,
+    var colorTheme = Theme.of(context).colorScheme;
+    return Column(
+      crossAxisAlignment: .start,
+      children: [
+        Stack(
+          children: [
+            SizedBox(child: Image.network(product.image, fit: BoxFit.cover)),
+
+            Positioned(
+              top: KayanSpacing.sm,
+              right: KayanSpacing.sm,
+              child: GestureDetector(
+                onTap: onFavoriteTap,
+                child: Container(
+                  padding: const EdgeInsets.all(KayanSpacing.sm),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(999),
+                    color: colorTheme.secondaryContainer,
+                  ),
+                  child: isFavorite
+                      ? Icon(Icons.favorite)
+                      : Icon(Icons.favorite_border),
+                ),
+              ),
+            ),
+          ],
+        ),
+
+        Container(
+          padding: EdgeInsets.symmetric(vertical: KayanSpacing.xs),
+          child: Column(
+            crossAxisAlignment: .start,
+            children: [
+              // Description and price
+              Row(
+                mainAxisAlignment: .spaceBetween,
                 children: [
-                  Stack(
-                    children: [
-                      SizedBox(
-                        child: Image.network(
-                          imageUrl,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: KayanSpacing.xs),
-                    child: Column(
-                      crossAxisAlignment: .start,
-                      children: [
-                        // Description and price
-                        Row(
-                          mainAxisAlignment: .spaceBetween,
-                          children: [Text(categoryType, style: textTheme.bodySmall,), Text('\$$price', style: textTheme.bodySmall,)],
-                        ),
-
-
-                        Text(categoryName, style: textTheme.headlineMedium,)
-                      ],
-                    ),
-                  ),
+                  Text(product.category, style: textTheme.bodySmall),
+                  Text('\$${product.price}', style: textTheme.bodySmall),
                 ],
-              );
+              ),
+
+              Text(product.name, style: textTheme.headlineMedium),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }

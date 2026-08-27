@@ -188,7 +188,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 ),
               ),
 
-              Center(
+              SizedBox(
+                width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
                     if (_key.currentState!.validate()) {
@@ -198,7 +199,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   },
                   child: Text(
                     'publish product'.toUpperCase(),
-                    style: textTheme.labelLarge,
                   ),
                 ),
               ),
