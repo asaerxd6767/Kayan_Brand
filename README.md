@@ -215,8 +215,6 @@ genhtml coverage/lcov.info -o coverage/html
 |-------------|----------------|-------------|
 | ![Home](docs/screenshots/home.png) | ![Details](docs/screenshots/details.png) | ![Add](docs/screenshots/add_product.png) |
 
-*Add screenshots to `docs/screenshots/` to showcase your app*
-
 ---
 
 ## 🗺️ Roadmap
@@ -265,9 +263,9 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## 📞 Contact
 
-**Your Name** — [@yourhandle](https://twitter.com/yourhandle) — email@example.com
+**Your Name** — [Asser Mohammed](https://www.linkedin.com/in/asser-mohammed-795769322/) — mohammedasser070@gmail.com
 
-Project Link: [https://github.com/yourusername/local_brand](https://github.com/yourusername/local_brand)
+Project Link: [https://github.com/asaerxd6767/local_brand](https://github.com/asaerxd6767/local_brand)
 
 ---
 
