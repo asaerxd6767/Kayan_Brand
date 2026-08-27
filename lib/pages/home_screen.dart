@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<ProductModel> products = [];
   bool isLoading = true;
   bool _hasFetched = false;
-  final Set<int> favoriteProducts = <int>{};
+  final Set<ProductModel> favoriteProducts = <ProductModel>{};
   final List<String> categories = [
     'New Arrivals',
     'Men',
@@ -30,12 +30,12 @@ class _HomeScreenState extends State<HomeScreen> {
     'Footwear',
     'Limited Edition',
   ];
-  void onFavoriteTap(int index) {
+  void onFavoriteTap(ProductModel product) {
     setState(() {
-      if (favoriteProducts.contains(index)) {
-        favoriteProducts.remove(index);
+      if (favoriteProducts.contains(product)) {
+        favoriteProducts.remove(product);
       } else {
-        favoriteProducts.add(index);
+        favoriteProducts.add(product);
       }
     });
   }
@@ -108,22 +108,23 @@ class _HomeScreenState extends State<HomeScreen> {
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: products.length,
                       itemBuilder: (context, index) {
-                        final isFavorite = favoriteProducts.contains(index);
+                        final product = products[index];
+                        final isFavorite = favoriteProducts.contains(product);
                         return GestureDetector(
                           onTap: () {
                             Navigator.pushNamed(
                               context,
                               Routes.productDetails,
                               arguments: {
-                                'product': products[index],
+                                'product': product,
                                 'isFavorite': isFavorite,
-                                'onFavoriteTap': () => onFavoriteTap(index),
+                                'onFavoriteTap': () => onFavoriteTap(product),
                               },
                             );
                           },
                           child: CategoryCard(
-                            product: products[index],
-                            onFavoriteTap: () => onFavoriteTap(index),
+                            product: product,
+                            onFavoriteTap: () => onFavoriteTap(product),
                             isFavorite: isFavorite,
                           ),
                         );
