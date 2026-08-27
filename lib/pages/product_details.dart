@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:local_brand/core/theme/app_spacing.dart';
+import 'package:local_brand/core/widgets/kayan_network_image.dart';
 import 'package:local_brand/models/product_model.dart';
 import '../core/widgets/app_bar.dart';
 
@@ -50,7 +51,11 @@ class _ProductDetailsState extends State<ProductDetails> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Image.network(widget.product.image),
+            KayanNetworkImage(
+              url: widget.product.image,
+              width: double.infinity,
+              height: 300,
+            ),
 
             Container(
               padding: EdgeInsets.all(KayanSpacing.md),

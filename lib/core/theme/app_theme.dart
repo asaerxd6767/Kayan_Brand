@@ -23,6 +23,7 @@ class KayanTheme {
         onSurfaceVariant: KayanColors.onSurfaceVariant,
         outline: KayanColors.outline,
         outlineVariant: KayanColors.outlineVariant,
+        shadow: KayanColors.warmCream,
         error: KayanColors.error,
         onError: KayanColors.onError,
       ),

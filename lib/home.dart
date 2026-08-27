@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:local_brand/core/theme/app_spacing.dart';
 import 'package:local_brand/core/widgets/nav_bar.dart';
 import 'package:local_brand/core/widgets/nav_item.dart';
 import 'package:local_brand/pages/home_screen.dart';
@@ -11,6 +12,7 @@ This file has the essiental pages I should add, it's the main scaffold where I w
 
 - The pages list has the instance of the screens
 - The list is the button that appear at the bottom navbar
+- a drawer so I can navigate to pages or logout
 */
 class HomeLayout extends StatefulWidget {
   const HomeLayout({super.key});
@@ -52,6 +54,24 @@ class _HomeLayoutState extends State<HomeLayout> {
         backgroundColor: colorTheme.primary,
         child: Icon(Icons.add, color: colorTheme.onPrimary),
         onPressed: () => Navigator.pushNamed(context, Routes.addProduct),
+      ),
+
+      drawer: Drawer(
+        backgroundColor: colorTheme.secondaryContainer,
+        child: Container(
+          padding: EdgeInsets.all(KayanSpacing.md),
+          child: Column(
+            mainAxisAlignment: .center,
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(onPressed: () {
+                  Navigator.pushReplacementNamed(context, Routes.login);
+                }, child: Text('Logout')),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

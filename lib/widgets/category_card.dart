@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:local_brand/core/theme/app_spacing.dart';
+import 'package:local_brand/core/widgets/kayan_network_image.dart';
 import 'package:local_brand/models/product_model.dart';
 
 class CategoryCard extends StatelessWidget {
@@ -22,7 +23,11 @@ class CategoryCard extends StatelessWidget {
       children: [
         Stack(
           children: [
-            SizedBox(child: Image.network(product.image, fit: BoxFit.cover)),
+            KayanNetworkImage(
+              url: product.image,
+              width: double.infinity,
+              height: 350,
+            ),
 
             Positioned(
               top: KayanSpacing.sm,

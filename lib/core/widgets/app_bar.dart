@@ -8,7 +8,10 @@ class KayanAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      leading: const Icon(Icons.menu, size: 25),
+      leading: IconButton(
+        onPressed: () => Scaffold.of(context).openDrawer(),
+        icon: const Icon(Icons.menu, size: 25),
+      ),
       centerTitle: true,
       title: Text('KAYAN', style: textTheme.headlineLarge),
       actions: [
