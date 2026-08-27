@@ -15,9 +15,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final ApiService api = ApiService();
+  static final ApiService _api = ApiService();
   List<ProductModel> products = [];
   bool isLoading = true;
+  bool _hasFetched = false;
   final Set<int> favoriteProducts = <int>{};
   final List<String> categories = [
     'New Arrivals',
@@ -40,16 +41,26 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void fetchProducts() async {
-    final result = await api.getProduct();
-    setState(() {
-      products = result;
-      isLoading = false;
-    });
+    if (_hasFetched) return;
+    _hasFetched = true;
+
+    try {
+      final result = await _api.getProduct();
+      if (mounted) {
+        setState(() {
+          products = result;
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => isLoading = false);
+      }
+    }
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fetchProducts();
   }
@@ -95,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   : ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: dummyProducts.length,
+                      itemCount: products.length,
                       itemBuilder: (context, index) {
                         final isFavorite = favoriteProducts.contains(index);
                         return GestureDetector(

@@ -21,19 +21,17 @@ class HomeLayout extends StatefulWidget {
 
 class _HomeLayoutState extends State<HomeLayout> {
   int _selectedIndex = 0;
-  final List<Widget> _pages = [HomeScreen(), const Placeholder()];
+  final List<Widget> _pages = [const HomeScreen(), const Placeholder()];
+
   @override
   Widget build(BuildContext context) {
     final colorTheme = Theme.of(context).colorScheme;
     final List<Widget> list = [
-      // home
       KayanNavItem(
         icon: Icons.home_outlined,
         isSelected: _selectedIndex == 0,
         onTap: () => setState(() => _selectedIndex = 0),
       ),
-
-      // profile
       KayanNavItem(
         icon: Icons.person_outline,
         isSelected: _selectedIndex == 1,
@@ -48,17 +46,13 @@ class _HomeLayoutState extends State<HomeLayout> {
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: KayanAppBar(textTheme: textTheme),
       ),
-
-      body: _pages[_selectedIndex],
-
+      body: IndexedStack(index: _selectedIndex, children: _pages),
       bottomNavigationBar: KayanGlassNavigationBar(items: list),
       floatingActionButton: FloatingActionButton(
-    backgroundColor: colorTheme.primary,
-    child:  Icon(Icons.add, color: colorTheme.onPrimary),
-    onPressed: () {
-      Navigator.pushNamed(context, Routes.addProduct);
-    },
-  ),
+        backgroundColor: colorTheme.primary,
+        child: Icon(Icons.add, color: colorTheme.onPrimary),
+        onPressed: () => Navigator.pushNamed(context, Routes.addProduct),
+      ),
     );
   }
 }
