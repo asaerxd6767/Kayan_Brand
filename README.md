@@ -19,8 +19,9 @@ A modern, feature-rich Flutter e-commerce application showcasing a complete prod
 
 ### 🛒 **Shopping Experience**
 - **Product Catalog** — Browse products with images, categories, and pricing
-- **Favorites System** — Heart toggle with persistent local state
+- **Favorites System** — Heart toggle with a shared `ProductManager`; a dedicated Favorites screen that stays in sync across all tabs
 - **Product Details** — Full-screen view with descriptions, fabric care, and specifications
+- **Add to Cart** — Add products to a shared cart list from the details screen
 - **Category Filtering** — Horizontal scrolling category chips
 
 ### ➕ **Product Management (Admin)**
@@ -39,7 +40,7 @@ A modern, feature-rich Flutter e-commerce application showcasing a complete prod
 
 ### 🧭 **Navigation & Routing**
 - **Named Routes** — Type-safe route definitions
-- **Bottom Navigation** — Persistent tab bar with home/profile
+- **Bottom Navigation** — Persistent tab bar with home/favorites/profile
 - **Deep Linking Ready** — Route generator pattern for scalability
 
 ---
@@ -68,10 +69,13 @@ lib/
 │       ├── app_bar.dart          # Custom app bar
 │       ├── nav_bar.dart          # Glassmorphism nav bar
 │       └── nav_item.dart         # Nav bar item component
+├── managers/
+│   └── product_manager.dart      # Shared ChangeNotifier singleton (favorites, cart, products)
 ├── models/
 │   └── product_model.dart        # Product data model + dummy data
 ├── pages/
 │   ├── home_screen.dart          # Product listing (main screen)
+│   ├── favorites_screen.dart     # Saved favorites view
 │   ├── product_details.dart      # Product detail view
 │   ├── add_product_screen.dart   # Admin product creation
 │   ├── login_screen.dart         # Auth (placeholder)
@@ -161,9 +165,29 @@ Maps API response to typed model with:
 - Safe JSON parsing with null checks
 
 ### State Management
-- **Local State** — `setState` for simple screens (favorites, loading)
+- **Shared state** — A `ProductManager` singleton (`ChangeNotifier`) holds favorites, cart, and products. `ListenableBuilder` widgets auto-rebuild when it changes, keeping all tabs in sync (no extra package needed).
+- **Local State** — `setState` for screen-specific UI state (loading, search, view-all toggle)
 - **No external state lib** — Keeps bundle size minimal
 - **Ready for Riverpod/Bloc** — Clean separation for scaling
+
+### ProductManager (`lib/managers/product_manager.dart`)
+A singleton (`static final instance`) so every screen reads/writes the same data:
+```dart
+class ProductManager extends ChangeNotifier {
+  ProductManager._();
+  static final ProductManager instance = ProductManager._();
+
+  final Set<ProductModel> favoriteProducts = <ProductModel>{};
+  final List<ProductModel> cartProducts = <ProductModel>[];
+  final List<ProductModel> allProducts = <ProductModel>[];
+
+  void toggleFavorite(ProductModel product) { /* ... */ notifyListeners(); }
+  bool isFavorite(ProductModel product)      => favoriteProducts.contains(product);
+  void addToCart(ProductModel product)       { /* ... */ notifyListeners(); }
+  void removeFromCart(ProductModel product)  { /* ... */ notifyListeners(); }
+}
+```
+Because it's in-memory only, favorites and cart reset when the app closes.
 
 ---
 
@@ -219,7 +243,8 @@ genhtml coverage/lcov.info -o coverage/html
 
 ## 🗺️ Roadmap
 
-- [ ] **Cart & Checkout** — Full shopping cart with persistence
+- [ ] **Cart Screen & Checkout** — Dedicated cart UI + persistence
+- [ ] **Persist favorites & cart** — Survive app restarts via SharedPreferences / DB
 - [ ] **User Authentication** — Firebase Auth integration
 - [ ] **Wishlist Sync** — Cloud-firestore backed favorites
 - [ ] **Push Notifications** — Order updates & promotions
