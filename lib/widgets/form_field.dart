@@ -26,6 +26,7 @@ class MyTextField extends StatelessWidget {
       controller: controller,
       obscureText: isPassword,
       decoration: InputDecoration(
+        
         prefixIcon: prefixIcon,
         border: const OutlineInputBorder(),
         hintText: hintText.toCapitalized(),

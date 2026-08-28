@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:local_brand/core/theme/app_spacing.dart';
 import 'package:local_brand/core/widgets/nav_bar.dart';
 import 'package:local_brand/core/widgets/nav_item.dart';
+import 'package:local_brand/pages/favorites_screen.dart';
 import 'package:local_brand/pages/home_screen.dart';
 
 import 'core/routing/routes.dart';
@@ -23,7 +24,11 @@ class HomeLayout extends StatefulWidget {
 
 class _HomeLayoutState extends State<HomeLayout> {
   int _selectedIndex = 0;
-  final List<Widget> _pages = [const HomeScreen(), const Placeholder()];
+  final List<Widget> _pages = const [
+    HomeScreen(),
+    FavoritesScreen(),
+    Placeholder(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +40,14 @@ class _HomeLayoutState extends State<HomeLayout> {
         onTap: () => setState(() => _selectedIndex = 0),
       ),
       KayanNavItem(
-        icon: Icons.person_outline,
+        icon: Icons.favorite_outline,
         isSelected: _selectedIndex == 1,
         onTap: () => setState(() => _selectedIndex = 1),
+      ),
+      KayanNavItem(
+        icon: Icons.person_outline,
+        isSelected: _selectedIndex == 2,
+        onTap: () => setState(() => _selectedIndex = 2),
       ),
     ];
 

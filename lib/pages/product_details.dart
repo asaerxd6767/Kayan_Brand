@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:local_brand/core/theme/app_spacing.dart';
 import 'package:local_brand/core/widgets/kayan_network_image.dart';
+import 'package:local_brand/managers/product_manager.dart';
 import 'package:local_brand/models/product_model.dart';
 import '../core/widgets/app_bar.dart';
 
@@ -105,8 +106,16 @@ class _ProductDetailsState extends State<ProductDetails> {
 
                       Expanded(
                         child: ElevatedButton(
-                          // TODO: Implement the code to add to the cart
-                          onPressed: () {},
+                          onPressed: () {
+                            ProductManager.instance.addToCart(widget.product);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  '${widget.product.name} added to cart',
+                                ),
+                              ),
+                            );
+                          },
                           child: Text('add to cart'.toUpperCase()),
                         ),
                       ),

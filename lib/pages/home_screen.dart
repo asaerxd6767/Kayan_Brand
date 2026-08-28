@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:local_brand/api/product_service.dart';
 import 'package:local_brand/core/theme/app_spacing.dart';
 import 'package:local_brand/core/utils/extenstions/capitalized.dart';
+import 'package:local_brand/managers/product_manager.dart';
 import 'package:local_brand/widgets/category_card.dart';
 import 'package:local_brand/widgets/form_field.dart';
 
@@ -22,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String? errorMessage;
   bool _hasFetched = false;
   bool viewAllProduct = false;
-  final Set<ProductModel> favoriteProducts = <ProductModel>{};
+  final ProductManager _manager = ProductManager.instance;
   final List<String> categories = [
     'New Arrivals',
     'Men',
@@ -33,15 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
     'Footwear',
     'Limited Edition',
   ];
-  void onFavoriteTap(ProductModel product) {
-    setState(() {
-      if (favoriteProducts.contains(product)) {
-        favoriteProducts.remove(product);
-      } else {
-        favoriteProducts.add(product);
-      }
-    });
-  }
+  bool isFavorite(ProductModel product) => _manager.isFavorite(product);
+  void onFavoriteTap(ProductModel product) => _manager.toggleFavorite(product);
 
   void fetchProducts() async {
     if (_hasFetched) return;
@@ -156,35 +150,36 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
 
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: viewAllProduct ? products.length : 10,
-                          itemBuilder: (context, index) {
-                            final product = products[index];
-                            final isFavorite = favoriteProducts.contains(
-                              product,
-                            );
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  Routes.productDetails,
-                                  arguments: {
-                                    'product': product,
-                                    'isFavorite': isFavorite,
-                                    'onFavoriteTap': () =>
-                                        onFavoriteTap(product),
-                                  },
-                                );
-                              },
-                              child: CategoryCard(
-                                product: product,
-                                onFavoriteTap: () => onFavoriteTap(product),
-                                isFavorite: isFavorite,
-                              ),
-                            );
-                          },
+                        ListenableBuilder(
+                          listenable: _manager,
+                          builder: (context, _) => ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: viewAllProduct ? products.length : 10,
+                            itemBuilder: (context, index) {
+                              final product = products[index];
+                              final isFavorite = _manager.isFavorite(product);
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    Routes.productDetails,
+                                    arguments: {
+                                      'product': product,
+                                      'isFavorite': isFavorite,
+                                      'onFavoriteTap': () =>
+                                          onFavoriteTap(product),
+                                    },
+                                  );
+                                },
+                                child: CategoryCard(
+                                  product: product,
+                                  onFavoriteTap: () => onFavoriteTap(product),
+                                  isFavorite: isFavorite,
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ],
                     ),
