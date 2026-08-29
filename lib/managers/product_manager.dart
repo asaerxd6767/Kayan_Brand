@@ -18,7 +18,14 @@ class ProductManager extends ChangeNotifier {
 
   static final ProductManager instance = ProductManager._();
 
-  final List<ProductModel> allProducts = <ProductModel>[];
+  List<ProductModel> _allProducts = <ProductModel>[];
+  List<ProductModel> get allProducts => _allProducts;
+
+  set allProducts(List<ProductModel> value) {
+    if (identical(_allProducts, value)) return;
+    _allProducts = value;
+  }
+
   final Set<ProductModel> favoriteProducts = <ProductModel>{};
   final List<ProductModel> cartProducts = <ProductModel>[];
 
