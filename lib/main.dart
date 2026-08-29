@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:local_brand/api/firebase_service.dart';
 import 'package:local_brand/core/routing/app_router.dart';
 import 'package:local_brand/core/theme/app_theme.dart';
 import 'core/routing/routes.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await FirebaseService.instance.initialize();
   runApp(const KayanApp());
 }
 

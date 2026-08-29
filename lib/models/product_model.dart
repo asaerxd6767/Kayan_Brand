@@ -18,16 +18,29 @@ class ProductModel {
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
+    final images = json['images'];
+    final categories = json['category'];
+
+    final image = images is List && images.isNotEmpty
+        ? images.first.toString()
+        : (json['image']?.toString() ?? '');
+
+    final category = categories is Map
+        ? (categories['name']?.toString() ?? '')
+        : (categories?.toString() ?? '');
+
     return ProductModel(
-      id: json['id'] ?? 0,
-      name: json['title'] ?? '',
-      image: json['images'][0] ?? '',
-      category: json['category']['name'] ?? '',
+      id: (json['id'] ?? 0) as int,
+      name: json['title']?.toString() ?? json['name']?.toString() ?? '',
+      image: image,
+      category: category,
       price: (json['price'] as num).toInt(),
-      description: json['description'],
-      fabricCare: 'Dry clean only. 100% Premium Silk.',
+      description: json['description']?.toString() ?? '',
+      fabricCare: json['fabricCare']?.toString() ??
+          'Dry clean only. 100% Premium Silk.',
     );
   }
+
 }
 
 // final List<ProductModel> dummyProducts = [

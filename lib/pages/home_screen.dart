@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:local_brand/api/product_service.dart';
+import 'package:local_brand/api/firebase_service.dart';
 import 'package:local_brand/core/theme/app_spacing.dart';
 import 'package:local_brand/core/utils/extenstions/capitalized.dart';
 import 'package:local_brand/managers/product_manager.dart';
@@ -17,11 +17,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final ApiService _api = ApiService();
-  List<ProductModel> products = [];
-  bool isLoading = true;
-  String? errorMessage;
-  bool _hasFetched = false;
+  final FirebaseService _api = FirebaseService.instance;
+  late Future<List<ProductModel>> _productsFuture;
   bool viewAllProduct = false;
   final ProductManager _manager = ProductManager.instance;
   final List<String> categories = [
@@ -34,45 +31,17 @@ class _HomeScreenState extends State<HomeScreen> {
     'Footwear',
     'Limited Edition',
   ];
-  bool isFavorite(ProductModel product) => _manager.isFavorite(product);
-  void onFavoriteTap(ProductModel product) => _manager.toggleFavorite(product);
-
-  void fetchProducts() async {
-    if (_hasFetched) return;
-    _hasFetched = true;
-
-    try {
-      final result = await _api.getProduct();
-      if (mounted) {
-        setState(() {
-          products = result;
-          isLoading = false;
-          errorMessage = null;
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          isLoading = false;
-          errorMessage = 'Failed to load products, network problem.';
-        });
-      }
-    }
-  }
 
   void retry() {
     setState(() {
-      isLoading = true;
-      errorMessage = null;
-      _hasFetched = false;
+      _productsFuture = _api.getProducts();
     });
-    fetchProducts();
   }
 
   @override
   void initState() {
     super.initState();
-    fetchProducts();
+    _productsFuture = _api.getProducts();
   }
 
   @override
@@ -110,83 +79,121 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
 
-              // Cards
-              isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : errorMessage != null
-                  ? Center(
+              // ========= display the products =========
+              FutureBuilder(
+                future: _productsFuture,
+                builder: (context, snapshot) {
+                  
+                  // ==================== (Loading)
+                  if (snapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  // ==================== (Error)
+                  if (snapshot.hasError) {
+                    return Center(
                       child: Column(
                         spacing: KayanSpacing.md,
                         children: [
-                          Text(errorMessage!, style: textTheme.bodyMedium),
+                          Text(
+                            'Failed to load: ${snapshot.error}',
+                            style: textTheme.bodyMedium,
+                            textAlign: TextAlign.center,
+                          ),
                           OutlinedButton(
                             onPressed: retry,
                             child: const Text('Retry'),
                           ),
                         ],
                       ),
-                    )
-                  : Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: .spaceBetween,
-                          children: [
-                            Text(
-                              'new arrivals'.toCapitalized(),
-                              style: textTheme.headlineMedium,
-                            ),
+                    );
+                  }
 
-                            TextButton(
-                              onPressed: () => setState(() {
-                                viewAllProduct = !viewAllProduct;
-                              }),
-                              child: Text(
-                                'view all'.toCapitalized(),
-                                style: textTheme.bodyMedium?.copyWith(
-                                  color: Colors.blue
-                                ),
+                  // ==================== (Recieved data)
+                  _manager.allProducts = snapshot.data!;
+
+                  // ==================== (Empty)
+                  if(_manager.allProducts.isEmpty) {
+                    return  Container(
+                    padding: EdgeInsets.symmetric(vertical: KayanSpacing.xl),
+                    child: Center(
+                      child: Text(
+                        'No products yet.',
+                        style: textTheme.bodyMedium,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
+                  } else {
+                  // ==================== (Data)
+                  return Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'new arrivals'.toCapitalized(),
+                            style: textTheme.headlineMedium,
+                          ),
+
+                          TextButton(
+                            onPressed: () => setState(() {
+                              viewAllProduct = !viewAllProduct;
+                            }),
+                            child: Text(
+                              'view all'.toCapitalized(),
+                              style: textTheme.bodyMedium?.copyWith(
+                                color: Colors.blue,
                               ),
                             ),
-                          ],
-                        ),
-
-                        ListenableBuilder(
-                          listenable: _manager,
-                          builder: (context, _) => ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: viewAllProduct ? products.length : 10,
-                            itemBuilder: (context, index) {
-                              final product = products[index];
-                              final isFavorite = _manager.isFavorite(product);
-                              return GestureDetector(
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    Routes.productDetails,
-                                    arguments: {
-                                      'product': product,
-                                      'isFavorite': isFavorite,
-                                      'onFavoriteTap': () =>
-                                          onFavoriteTap(product),
-                                    },
-                                  );
-                                },
-                                child: CategoryCard(
-                                  product: product,
-                                  onFavoriteTap: () => onFavoriteTap(product),
-                                  isFavorite: isFavorite,
-                                ),
-                              );
-                            },
                           ),
+                        ],
+                      ),
+
+                      ListenableBuilder(
+                        listenable: _manager,
+                        builder: (context, _) => ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: _manager.allProducts.length,
+
+                          itemBuilder: (context, index) {
+                            final product = _manager.allProducts[index];
+                            final isFavorite = _manager.isFavorite(product);
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  Routes.productDetails,
+                                  arguments: {
+                                    'product': product,
+                                    'isFavorite': isFavorite,
+                                    'onFavoriteTap': () =>
+                                        _manager.toggleFavorite(product),
+                                  },
+                                );
+                              },
+                              child: CategoryCard(
+                                product: product,
+                                onFavoriteTap: () =>
+                                    _manager.toggleFavorite(product),
+                                isFavorite: isFavorite,
+                              ),
+                            );
+                          },
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
+                  );
+                  }
+                },
+              ),
             ],
           ),
         ),
-        // Categories
       ),
     );
   }

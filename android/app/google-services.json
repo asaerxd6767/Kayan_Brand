@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "993234451363",
+    "project_id": "kayan-25fea",
+    "storage_bucket": "kayan-25fea.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:993234451363:android:9dcac2b2a5f7da55cf3816",
+        "android_client_info": {
+          "package_name": "com.example.local_brand"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaZ9ttBKkQexG928T7nb2l5OnPEK4uSws"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
