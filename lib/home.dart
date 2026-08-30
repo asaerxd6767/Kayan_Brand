@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:local_brand/api/auth_service.dart';
 import 'package:local_brand/core/theme/app_spacing.dart';
 import 'package:local_brand/core/widgets/nav_bar.dart';
 import 'package:local_brand/core/widgets/nav_item.dart';
@@ -24,11 +25,36 @@ class HomeLayout extends StatefulWidget {
 
 class _HomeLayoutState extends State<HomeLayout> {
   int _selectedIndex = 0;
+  final _auth = AuthService.instance;
   final List<Widget> _pages = const [
     HomeScreen(),
     FavoritesScreen(),
     Placeholder(),
   ];
+
+  Future<void> _confirmSignout() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Sign out'),
+        content: Text('Are you sure you want to sign out?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Sign out'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true) {
+      await _auth.signOut();
+      // No manual navigation: the auth stream in main.dart sends us to Login.
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,9 +101,10 @@ class _HomeLayoutState extends State<HomeLayout> {
             children: [
               SizedBox(
                 width: double.infinity,
-                child: OutlinedButton(onPressed: () {
-                  Navigator.pushReplacementNamed(context, Routes.login);
-                }, child: Text('Logout')),
+                child: OutlinedButton(
+                  onPressed: _confirmSignout,
+                  child: Text('Logout'),
+                ),
               ),
             ],
           ),

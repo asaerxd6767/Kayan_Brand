@@ -41,6 +41,18 @@ class ProductModel {
     );
   }
 
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': name,
+      'image': image,
+      'category': category,
+      'price': price,
+      'description': description,
+      'fabricCare': fabricCare,
+    };
+  }
+
 }
 
 // final List<ProductModel> dummyProducts = [

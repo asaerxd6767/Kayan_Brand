@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:local_brand/api/auth_service.dart';
 import 'package:local_brand/core/theme/app_spacing.dart';
 import 'package:local_brand/core/utils/app_validators.dart';
 import 'package:local_brand/core/utils/extenstions/capitalized.dart';
 import 'package:local_brand/pages/login_screen.dart';
-import '../core/routing/routes.dart';
 import '../widgets/form_field.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -15,6 +15,8 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
   final _key = GlobalKey<FormState>();
+  final _auth = AuthService.instance;
+  bool _isLoading = false;
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -22,6 +24,26 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmpasswordController =
       TextEditingController();
+
+  Future<void> _signUp() async {
+    if (!_key.currentState!.validate()) return;
+
+    setState(() => _isLoading = true);
+    try {
+      await _auth.signUp(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
+      // No manual navigation: the auth stream in main.dart sends us to Home.
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Sign up failed: $e')),
+      );
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
 
   @override
   void dispose() {
@@ -124,14 +146,14 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {
-                        if (_key.currentState!.validate()) {
-                          // TODO: Implement Auth here
-                          if(!context.mounted) return;
-                          Navigator.pushReplacementNamed(context, Routes.home);
-                        }
-                      },
-                      child: Text('SIGN UP'),
+                      onPressed: _isLoading ? null : _signUp,
+                      child: _isLoading
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : Text('SIGN UP'),
                     ),
 
                     Row(

@@ -18,7 +18,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final FirebaseService _api = FirebaseService.instance;
-  late Future<List<ProductModel>> _productsFuture;
   bool viewAllProduct = false;
   final ProductManager _manager = ProductManager.instance;
   final List<String> categories = [
@@ -32,16 +31,35 @@ class _HomeScreenState extends State<HomeScreen> {
     'Limited Edition',
   ];
 
-  void retry() {
-    setState(() {
-      _productsFuture = _api.getProducts();
-    });
+  Future<void> _confirmDelete(ProductModel product) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete product'),
+        content: Text(
+          'Are you sure you want to delete "${product.name}"?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      await _api.deleteProduct(product.id);
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    _productsFuture = _api.getProducts();
   }
 
   @override
@@ -80,8 +98,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               // ========= display the products =========
-              FutureBuilder(
-                future: _productsFuture,
+              StreamBuilder(
+                stream: _api.productsStream(),
                 builder: (context, snapshot) {
                   
                   // ==================== (Loading)
@@ -95,19 +113,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   // ==================== (Error)
                   if (snapshot.hasError) {
                     return Center(
-                      child: Column(
-                        spacing: KayanSpacing.md,
-                        children: [
-                          Text(
-                            'Failed to load: ${snapshot.error}',
-                            style: textTheme.bodyMedium,
-                            textAlign: TextAlign.center,
-                          ),
-                          OutlinedButton(
-                            onPressed: retry,
-                            child: const Text('Retry'),
-                          ),
-                        ],
+                      child: Text(
+                        'Failed to load: ${snapshot.error}',
+                        style: textTheme.bodyMedium,
+                        textAlign: TextAlign.center,
                       ),
                     );
                   }
@@ -181,6 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 onFavoriteTap: () =>
                                     _manager.toggleFavorite(product),
                                 isFavorite: isFavorite,
+                                onDeleteTap: () => _confirmDelete(product),
                               ),
                             );
                           },

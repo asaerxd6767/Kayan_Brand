@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:local_brand/api/auth_service.dart';
 import 'package:local_brand/core/theme/app_spacing.dart';
 import 'package:local_brand/core/utils/app_validators.dart';
 import 'package:local_brand/pages/signup_screen.dart';
 import 'package:local_brand/widgets/form_field.dart';
-
-import '../core/routing/routes.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,9 +14,31 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _auth = AuthService.instance;
+  bool _isLoading = false;
 
   final TextEditingController _emailcontroller = TextEditingController();
   final TextEditingController _passwordcontroller = TextEditingController();
+
+  Future<void> _signIn() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => _isLoading = true);
+    try {
+      await _auth.signIn(
+        email: _emailcontroller.text.trim(),
+        password: _passwordcontroller.text,
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Sign in failed: $e')),
+      );
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
   @override
   void dispose() {
     _emailcontroller.dispose();
@@ -79,15 +100,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: OutlinedButton(
-                        onPressed: () {
-                          if(_formKey.currentState!.validate()) {
-                            // TODO: Implement Auth here
-                          if(!context.mounted) return;
-
-                            Navigator.pushReplacementNamed(context, Routes.home);
-                          }
-                        },
-                        child: const Text('LOGIN'),
+                        onPressed: _isLoading ? null : _signIn,
+                        child: _isLoading
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              )
+                            : const Text('LOGIN'),
                       ),
                     ),
 

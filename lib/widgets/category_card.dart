@@ -7,11 +7,12 @@ class CategoryCard extends StatelessWidget {
   final ProductModel product;
   final bool isFavorite;
   final VoidCallback onFavoriteTap;
+  final VoidCallback? onDeleteTap;
   const CategoryCard({
     super.key,
     required this.product,
     required this.isFavorite,
-    required this.onFavoriteTap,
+    required this.onFavoriteTap, this.onDeleteTap,
   });
 
   @override
@@ -29,6 +30,7 @@ class CategoryCard extends StatelessWidget {
               height: 350,
             ),
 
+            // FAVORITE Button
             Positioned(
               top: KayanSpacing.sm,
               right: KayanSpacing.sm,
@@ -43,6 +45,23 @@ class CategoryCard extends StatelessWidget {
                   child: isFavorite
                       ? Icon(Icons.favorite)
                       : Icon(Icons.favorite_border),
+                ),
+              ),
+            ),
+
+            // DELETE BUTTON
+            Positioned(
+              top: KayanSpacing.sm,
+              left: KayanSpacing.sm,
+              child: GestureDetector(
+                onTap: onDeleteTap,
+                child: Container(
+                  padding: const EdgeInsets.all(KayanSpacing.sm),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(999),
+                    color: colorTheme.secondaryContainer,
+                  ),
+                  child: Icon(Icons.delete, color: colorTheme.error)
                 ),
               ),
             ),

@@ -26,12 +26,49 @@ class FirebaseService {
     _db = FirebaseFirestore.instance;
   }
 
-  // ---- Products ----
+  // ================= Products =================
+
+  CollectionReference get _products =>
+      (_db ?? FirebaseFirestore.instance).collection('products');
+
+  // ---------------------- CREATE
+  // The product ProductModel.id is used as the Firestore document id so (easy to update/delete later).
+  Future<void> createProduct(ProductModel product) async {
+    await _products.doc(product.id.toString()).set(product.toMap());
+  }
+
+  // ---------------------- READ
+  // The read is used once, but streams listens if there's changes
   Future<List<ProductModel>> getProducts() async {
-    final db = _db ?? FirebaseFirestore.instance;
-    final snapshot = await db.collection('products').get();
+    final snapshot = await _products.get();
     return snapshot.docs
-        .map((doc) => ProductModel.fromJson(doc.data()))
+        .map((doc) => ProductModel.fromJson(doc.data() as Map<String, dynamic>))
         .toList();
+  }
+
+  /// Stream that emits the products list whenever the collection changes.
+  Stream<List<ProductModel>> productsStream() {
+    return _products.snapshots().map(
+      (snapshot) => snapshot.docs
+          .map(
+            (doc) => ProductModel.fromJson(doc.data() as Map<String, dynamic>),
+          )
+          .toList(),
+    );
+  }
+
+  // ---------------------- UPDATE
+  Future<void> updateProduct(ProductModel product) async {
+    await _products.doc(product.id.toString()).set(product.toMap());
+  }
+
+  // ---------------------- UPDATE with ID
+  Future<void> updateProductFields(int id, Map<String, dynamic> fields) async {
+    await _products.doc(id.toString()).update(fields);
+  }
+
+  // ---------------------- DELETE
+  Future<void> deleteProduct(int id) async {
+    await _products.doc(id.toString()).delete();
   }
 }

@@ -1,30 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:local_brand/pages/login_screen.dart';
 import '../core/theme/app_color.dart';
 
-class SplashScreen extends StatefulWidget {
+/*
+Splash is shown while Firebase reads the auth state (see main.dart).
+Routing is driven by the auth stream, so this screen no longer navigates itself.
+*/
+
+class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
-
-  @override
-  State<SplashScreen> createState() => _SplashScreenState();
-
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-    
-    toLogin();
-  }
-  
-  void toLogin() async {
-    await Future.delayed(const Duration(seconds: 3));
-
-    if(!mounted) return;
-
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (builder) => LoginScreen()));
-  }
 
   @override
   Widget build(BuildContext context) {
