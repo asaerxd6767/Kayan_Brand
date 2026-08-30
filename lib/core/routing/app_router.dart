@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:local_brand/home.dart';
-import 'package:local_brand/models/product_model.dart';
 import 'package:local_brand/pages/add_product_screen.dart';
 import 'package:local_brand/pages/login_screen.dart';
 import 'package:local_brand/pages/product_details.dart';
 import 'package:local_brand/pages/signup_screen.dart';
-import 'package:local_brand/pages/splash_screen.dart';
 import 'routes.dart';
 
 class AppRouter {
@@ -14,9 +12,6 @@ class AppRouter {
     final argument = settings.arguments;
 
     switch (settings.name) {
-      case Routes.splash:
-        return MaterialPageRoute(builder: (context) => const SplashScreen());
-
       case Routes.login:
         return MaterialPageRoute(builder: (context) => const LoginScreen());
 

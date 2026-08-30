@@ -33,7 +33,7 @@ class MyTextField extends StatelessWidget {
         hintStyle: textTheme.bodyMedium?.copyWith(color: colorScheme.outline),
         suffix: suffix,
       ),
-      maxLines: maxLines,
+      maxLines: isPassword ? 1 : maxLines,
       validator: validate,
     );
   }

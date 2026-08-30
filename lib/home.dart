@@ -32,6 +32,27 @@ class _HomeLayoutState extends State<HomeLayout> {
     Placeholder(),
   ];
 
+  void showPersonDialog() {
+    final user = _auth.currentUser;
+    final name = user?.displayName?.isNotEmpty == true
+        ? user!.displayName!
+        : 'User';
+    final email = user?.email ?? 'No email';
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Hello, $name'),
+        content: Text(email),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close'),
+          ),
+        ],
+      ),
+    );
+  }
   Future<void> _confirmSignout() async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -82,7 +103,10 @@ class _HomeLayoutState extends State<HomeLayout> {
       extendBody: true,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
-        child: KayanAppBar(textTheme: textTheme),
+        child: KayanAppBar(
+          textTheme: textTheme,
+          onPressedPerson: showPersonDialog,
+        ),
       ),
       body: IndexedStack(index: _selectedIndex, children: _pages),
       bottomNavigationBar: KayanGlassNavigationBar(items: list),

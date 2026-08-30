@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class KayanAppBar extends StatelessWidget {
-  const KayanAppBar({super.key, required this.textTheme});
+  const KayanAppBar({super.key, required this.textTheme, this.onPressedPerson});
 
   final TextTheme textTheme;
+  final VoidCallback? onPressedPerson;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,9 @@ class KayanAppBar extends StatelessWidget {
       title: Text('KAYAN', style: textTheme.headlineLarge),
       actions: [
         const Icon(Icons.shopping_bag_outlined, size: 25),
-        const Icon(Icons.person_2_outlined, size: 25),
+        IconButton(
+          onPressed: onPressedPerson,
+          icon: const Icon(Icons.person_2_outlined, size: 25)),
       ],
     );
   }
