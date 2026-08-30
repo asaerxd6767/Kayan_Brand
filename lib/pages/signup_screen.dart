@@ -32,7 +32,7 @@ class _SignupScreenState extends State<SignupScreen> {
     try {
       final credential = await _auth.signUp(
         email: _emailController.text.trim(),
-        password: _passwordController.text,
+        password: _passwordController.text.trim(),
       );
       await credential.user?.updateDisplayName(_nameController.text.trim());
       // No manual navigation: the auth stream in main.dart sends us to Home.

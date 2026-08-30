@@ -22,13 +22,14 @@ class KayanApp extends StatelessWidget {
       stream: AuthService.instance.authStateChanges,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const SplashHost();
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: KayanTheme.lightTheme,
+            home: const SplashScreen(),
+          );
         }
 
-        // Signed in -> Home, otherwise -> Login. Reacts automatically to logout.
         final isSignedIn = snapshot.data != null;
-        // The ValueKey forces a fresh navigator when the auth state flips,
-        // so the new initialRoute (home vs login) is actually applied.
         return MaterialApp(
           key: ValueKey(isSignedIn),
           debugShowCheckedModeBanner: false,

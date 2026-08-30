@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       await _auth.signIn(
         email: _emailcontroller.text.trim(),
-        password: _passwordcontroller.text,
+        password: _passwordcontroller.text.trim(),
       );
     } catch (e) {
       if (!mounted) return;
