@@ -19,15 +19,14 @@ class CartScreen extends StatelessWidget {
         spacing: KayanSpacing.base,
         children: [
           Text('Favorites', style: textTheme.headlineLarge),
-
-          manager.cartProducts.isEmpty
-              ? Text(
-                  'The cart is empty, please add the products you want',
-                  textAlign: .center,
-                )
-              : ListenableBuilder(
-                  listenable: manager,
-                  builder: (context, _) => ListView.builder(
+          ListenableBuilder(
+            listenable: manager,
+            builder: (context, _) => manager.cartProducts.isEmpty
+                ? Text(
+                    'The cart is empty, please add the products you want',
+                    textAlign: .center,
+                  )
+                : ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: manager.cartProducts.length,
@@ -55,7 +54,7 @@ class CartScreen extends StatelessWidget {
                       );
                     },
                   ),
-                ),
+          ),
         ],
       ),
     );

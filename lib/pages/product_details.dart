@@ -86,40 +86,67 @@ class _ProductDetailsState extends State<ProductDetails> {
                   headLine('fabric and care'),
                   Text(widget.product.fabricCare),
 
-                  // TODO: Implement on cart screen
-                  Row(
-                    spacing: 10,
-                    children: [
-                      GestureDetector(
-                        onTap: onFavoriteTap,
-                        child: Container(
-                          padding: EdgeInsets.all(KayanSpacing.sm),
-                          decoration: BoxDecoration(
-                            color: colorTheme.secondaryContainer,
-                            borderRadius: BorderRadius.circular(999),
-                          ),
-                          child: isFavorite
-                              ? Icon(Icons.favorite)
-                              : Icon(Icons.favorite_border),
-                        ),
-                      ),
-
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: () {
-                            ProductManager.instance.addToCart(widget.product);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  '${widget.product.name} added to cart',
-                                ),
+                  ListenableBuilder(
+                    listenable: ProductManager.instance,
+                    builder: (context, _) {
+                      final manager = ProductManager.instance;
+                      final isInCart = manager.isInCart(widget.product);
+                      return Row(
+                        spacing: 10,
+                        children: [
+                          GestureDetector(
+                            onTap: onFavoriteTap,
+                            child: Container(
+                              padding: EdgeInsets.all(KayanSpacing.sm),
+                              decoration: BoxDecoration(
+                                color: colorTheme.secondaryContainer,
+                                borderRadius: BorderRadius.circular(999),
                               ),
-                            );
-                          },
-                          child: Text('add to cart'.toUpperCase()),
-                        ),
-                      ),
-                    ],
+                              child: isFavorite
+                                  ? Icon(Icons.favorite)
+                                  : Icon(Icons.favorite_border),
+                            ),
+                          ),
+
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: isInCart
+                                  ? null
+                                  : () {
+                                      manager.addToCart(widget.product);
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            '${widget.product.name} added to cart',
+                                          ),
+                                        ),
+                                      );
+                                    },
+                              child: Text('add to cart'.toUpperCase()),
+                            ),
+                          ),
+
+                          if (isInCart)
+                            IconButton(
+                              tooltip: 'Remove from cart',
+                              onPressed: () {
+                                manager.removeFromCart(widget.product);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      '${widget.product.name} removed from cart',
+                                    ),
+                                  ),
+                                );
+                              },
+                              icon: Icon(
+                                Icons.remove_shopping_cart,
+                                color: colorTheme.error,
+                              ),
+                            ),
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),

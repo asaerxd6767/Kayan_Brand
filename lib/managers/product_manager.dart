@@ -51,4 +51,6 @@ class ProductManager extends ChangeNotifier {
     cartProducts.remove(product);
     notifyListeners();
   }
+
+  bool isInCart(ProductModel product) => cartProducts.contains(product);
 }
