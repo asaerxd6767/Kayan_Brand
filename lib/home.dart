@@ -3,9 +3,7 @@ import 'package:local_brand/api/auth_service.dart';
 import 'package:local_brand/core/theme/app_spacing.dart';
 import 'package:local_brand/core/widgets/nav_bar.dart';
 import 'package:local_brand/core/widgets/nav_item.dart';
-import 'package:local_brand/pages/cart_screen.dart';
-import 'package:local_brand/pages/favorites_screen.dart';
-import 'package:local_brand/pages/home_screen.dart';
+import 'package:local_brand/pages/screens.dart';
 
 import 'core/routing/routes.dart';
 import 'core/widgets/app_bar.dart';

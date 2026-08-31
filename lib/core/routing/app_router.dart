@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:local_brand/home.dart';
-import 'package:local_brand/pages/add_product_screen.dart';
-import 'package:local_brand/pages/login_screen.dart';
-import 'package:local_brand/pages/product_details.dart';
-import 'package:local_brand/pages/signup_screen.dart';
+import 'package:local_brand/pages/screens.dart';
 import 'routes.dart';
 
 class AppRouter {
