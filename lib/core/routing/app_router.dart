@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:local_brand/home.dart';
 import 'package:local_brand/pages/add_product_screen.dart';
+import 'package:local_brand/pages/cart_screen.dart';
 import 'package:local_brand/pages/login_screen.dart';
 import 'package:local_brand/pages/product_details.dart';
 import 'package:local_brand/pages/signup_screen.dart';
@@ -35,7 +36,6 @@ class AppRouter {
             onFavoriteTap: product['onFavoriteTap'],
           ),
         );
-
       default:
         return MaterialPageRoute(
           builder: (context) => const Scaffold(body: Text('No page here')),

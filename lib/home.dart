@@ -3,6 +3,7 @@ import 'package:local_brand/api/auth_service.dart';
 import 'package:local_brand/core/theme/app_spacing.dart';
 import 'package:local_brand/core/widgets/nav_bar.dart';
 import 'package:local_brand/core/widgets/nav_item.dart';
+import 'package:local_brand/pages/cart_screen.dart';
 import 'package:local_brand/pages/favorites_screen.dart';
 import 'package:local_brand/pages/home_screen.dart';
 
@@ -28,9 +29,13 @@ class _HomeLayoutState extends State<HomeLayout> {
   final _auth = AuthService.instance;
   final List<Widget> _pages = const [
     HomeScreen(),
+    CartScreen(),
     FavoritesScreen(),
     Placeholder(),
   ];
+  void onPressedCart() {
+    setState(() => _selectedIndex = 1,);
+  }
 
   void showPersonDialog() {
     final user = _auth.currentUser;
@@ -53,6 +58,7 @@ class _HomeLayoutState extends State<HomeLayout> {
       ),
     );
   }
+
   Future<void> _confirmSignout() async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -80,6 +86,7 @@ class _HomeLayoutState extends State<HomeLayout> {
   @override
   Widget build(BuildContext context) {
     final colorTheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     final List<Widget> list = [
       KayanNavItem(
         icon: Icons.home_outlined,
@@ -87,18 +94,22 @@ class _HomeLayoutState extends State<HomeLayout> {
         onTap: () => setState(() => _selectedIndex = 0),
       ),
       KayanNavItem(
-        icon: Icons.favorite_outline,
+        icon: Icons.shopping_bag_outlined,
         isSelected: _selectedIndex == 1,
         onTap: () => setState(() => _selectedIndex = 1),
       ),
       KayanNavItem(
-        icon: Icons.person_outline,
+        icon: Icons.favorite_outline,
         isSelected: _selectedIndex == 2,
         onTap: () => setState(() => _selectedIndex = 2),
       ),
+      KayanNavItem(
+        icon: Icons.person_outline,
+        isSelected: _selectedIndex == 3,
+        onTap: () => setState(() => _selectedIndex = 3),
+      ),
     ];
 
-    final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       extendBody: true,
       appBar: PreferredSize(
@@ -106,8 +117,10 @@ class _HomeLayoutState extends State<HomeLayout> {
         child: KayanAppBar(
           textTheme: textTheme,
           onPressedPerson: showPersonDialog,
+          onPressedCart: onPressedCart,
         ),
       ),
+
       body: IndexedStack(index: _selectedIndex, children: _pages),
       bottomNavigationBar: KayanGlassNavigationBar(items: list),
       floatingActionButton: FloatingActionButton(
