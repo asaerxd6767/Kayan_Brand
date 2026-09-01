@@ -96,4 +96,38 @@ void main() {
         grid.gridDelegate as SliverGridDelegateWithFixedCrossAxisCount;
     expect(delegate.crossAxisCount, greaterThan(1));
   });
+
+  testWidgets('grid content is horizontally centered inside a wide screen', (
+    WidgetTester tester,
+  ) async {
+    final screen = 1400.0;
+    tester.view.physicalSize = Size(screen, 1000);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SingleChildScrollView(
+            child: Center(
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: 1200),
+                child: ProductGrid(
+                  itemCount: 6,
+                  itemBuilder: (context, index) => const SizedBox(),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+
+    final gridRect = tester.getRect(find.byType(GridView));
+    final center = gridRect.center.dx;
+    final expectedCenter = screen / 2;
+    // Allow for small layout rounding.
+    expect((center - expectedCenter).abs(), lessThan(1.0));
+  });
 }

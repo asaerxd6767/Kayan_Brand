@@ -67,18 +67,18 @@ class _HomeScreenState extends State<HomeScreen> {
         : KayanSpacing.containerMargin * 2;
 
     return SingleChildScrollView(
-      child: Container(
-        margin: EdgeInsets.fromLTRB(
-          horizontalMargin,
-          KayanSpacing.containerMargin,
-          horizontalMargin,
-          context.isMobile ? 0 : KayanSpacing.containerMargin,
-        ),
-        constraints: BoxConstraints(
-          maxWidth: AppBreakpoints.desktopContentWidth,
-        ),
-        alignment: Alignment.topCenter,
-        child: Form(
+      child: Center(
+        child: Container(
+          constraints: BoxConstraints(
+            maxWidth: AppBreakpoints.desktopContentWidth,
+          ),
+          margin: EdgeInsets.fromLTRB(
+            horizontalMargin,
+            KayanSpacing.containerMargin,
+            horizontalMargin,
+            context.isMobile ? 0 : KayanSpacing.containerMargin,
+          ),
+          child: Form(
           child: Column(
             spacing: KayanSpacing.md,
             children: [
@@ -209,6 +209,7 @@ ListenableBuilder(
             ],
           ),
         ),
+      ),
       ),
     );
   }

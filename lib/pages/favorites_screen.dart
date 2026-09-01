@@ -27,56 +27,57 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         final favorites = _manager.favoriteProducts.toList();
 
         return SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.all(KayanSpacing.md),
-            alignment: Alignment.topCenter,
-            constraints: const BoxConstraints(
-              maxWidth: AppBreakpoints.desktopContentWidth,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Favorites', style: textTheme.headlineLarge),
+          child: Center(
+            child: Container(
+              padding: EdgeInsets.all(KayanSpacing.md),
+              constraints: const BoxConstraints(
+                maxWidth: AppBreakpoints.desktopContentWidth,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Favorites', style: textTheme.headlineLarge),
 
-                if (favorites.isEmpty)
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: KayanSpacing.xl),
-                    child: Center(
-                      child: Text(
-                        'No favorites yet.\nTap the heart on a product to save it here.',
-                        style: textTheme.bodyMedium,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  )
-                else
-                  ProductGrid(
-                    itemCount: favorites.length,
-                    itemBuilder: (context, index) {
-                      final ProductModel product = favorites[index];
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context,
-                            Routes.productDetails,
-                            arguments: {
-                              'product': product,
-                              'isFavorite': _manager.isFavorite(product),
-                              'onFavoriteTap': () =>
-                                  _manager.toggleFavorite(product),
-                            },
-                          );
-                        },
-                        child: CategoryCard(
-                          product: product,
-                          onFavoriteTap: () =>
-                              _manager.toggleFavorite(product),
-                          isFavorite: _manager.isFavorite(product),
+                  if (favorites.isEmpty)
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: KayanSpacing.xl),
+                      child: Center(
+                        child: Text(
+                          'No favorites yet.\nTap the heart on a product to save it here.',
+                          style: textTheme.bodyMedium,
+                          textAlign: TextAlign.center,
                         ),
-                      );
-                    },
-                  ),
-              ],
+                      ),
+                    )
+                  else
+                    ProductGrid(
+                      itemCount: favorites.length,
+                      itemBuilder: (context, index) {
+                        final ProductModel product = favorites[index];
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              Routes.productDetails,
+                              arguments: {
+                                'product': product,
+                                'isFavorite': _manager.isFavorite(product),
+                                'onFavoriteTap': () =>
+                                    _manager.toggleFavorite(product),
+                              },
+                            );
+                          },
+                          child: CategoryCard(
+                            product: product,
+                            onFavoriteTap: () =>
+                                _manager.toggleFavorite(product),
+                            isFavorite: _manager.isFavorite(product),
+                          ),
+                        );
+                      },
+                    ),
+                ],
+              ),
             ),
           ),
         );
