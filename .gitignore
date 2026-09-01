@@ -53,3 +53,8 @@ app.*.map.json
 *.p12
 .env
 *.env
+
+# Firebase rules/config (keep local; deployment is via CLI)
+/firestore.rules
+/android/app/google-services.json
+/lib/firebase_options.dart
