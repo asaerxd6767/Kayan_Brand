@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:local_brand/api/auth_service.dart';
 import 'package:local_brand/core/theme/app_spacing.dart';
+import 'package:local_brand/core/utils/responsive.dart';
 import 'package:local_brand/core/widgets/nav_bar.dart';
 import 'package:local_brand/core/widgets/nav_item.dart';
 import 'package:local_brand/pages/screens.dart';
@@ -85,6 +86,8 @@ class _HomeLayoutState extends State<HomeLayout> {
   Widget build(BuildContext context) {
     final colorTheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+    final isDesktop = context.isDesktop;
+
     final List<Widget> list = [
       KayanNavItem(
         icon: Icons.home_outlined,
@@ -108,8 +111,33 @@ class _HomeLayoutState extends State<HomeLayout> {
       ),
     ];
 
+    final List<NavigationRailDestination> railDestinations = [
+      const NavigationRailDestination(
+        icon: Icon(Icons.home_outlined),
+        selectedIcon: Icon(Icons.home),
+        label: Text('Home'),
+      ),
+      const NavigationRailDestination(
+        icon: Icon(Icons.shopping_bag_outlined),
+        selectedIcon: Icon(Icons.shopping_bag),
+        label: Text('Cart'),
+      ),
+      const NavigationRailDestination(
+        icon: Icon(Icons.favorite_outline),
+        selectedIcon: Icon(Icons.favorite),
+        label: Text('Favorites'),
+      ),
+      const NavigationRailDestination(
+        icon: Icon(Icons.person_outline),
+        selectedIcon: Icon(Icons.person),
+        label: Text('Profile'),
+      ),
+    ];
+
+    final body = IndexedStack(index: _selectedIndex, children: _pages);
+
     return Scaffold(
-      extendBody: true,
+      extendBody: !isDesktop,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: KayanAppBar(
@@ -119,32 +147,52 @@ class _HomeLayoutState extends State<HomeLayout> {
         ),
       ),
 
-      body: IndexedStack(index: _selectedIndex, children: _pages),
-      bottomNavigationBar: KayanGlassNavigationBar(items: list),
+      body: isDesktop
+          ? Row(
+              children: [
+                NavigationRail(
+                  selectedIndex: _selectedIndex,
+                  onDestinationSelected: (index) =>
+                      setState(() => _selectedIndex = index),
+                  labelType: NavigationRailLabelType.all,
+                  backgroundColor: colorTheme.secondaryContainer,
+                  indicatorColor: colorTheme.primary,
+                  indicatorShape: const StadiumBorder(),
+                  destinations: railDestinations,
+                ),
+                const VerticalDivider(thickness: 1, width: 1),
+                Expanded(child: body),
+              ],
+            )
+          : body,
+      bottomNavigationBar:
+          isDesktop ? null : KayanGlassNavigationBar(items: list),
       floatingActionButton: FloatingActionButton(
         backgroundColor: colorTheme.primary,
         child: Icon(Icons.add, color: colorTheme.onPrimary),
         onPressed: () => Navigator.pushNamed(context, Routes.addProduct),
       ),
 
-      drawer: Drawer(
-        backgroundColor: colorTheme.secondaryContainer,
-        child: Container(
-          padding: EdgeInsets.all(KayanSpacing.md),
-          child: Column(
-            mainAxisAlignment: .center,
-            children: [
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: _confirmSignout,
-                  child: Text('Logout'),
+      drawer: isDesktop
+          ? null
+          : Drawer(
+              backgroundColor: colorTheme.secondaryContainer,
+              child: Container(
+                padding: EdgeInsets.all(KayanSpacing.md),
+                child: Column(
+                  mainAxisAlignment: .center,
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton(
+                        onPressed: _confirmSignout,
+                        child: Text('Logout'),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

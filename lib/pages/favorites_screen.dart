@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:local_brand/core/theme/app_spacing.dart';
+import 'package:local_brand/core/utils/responsive.dart';
 import 'package:local_brand/managers/product_manager.dart';
 import 'package:local_brand/widgets/category_card.dart';
+import 'package:local_brand/widgets/product_grid.dart';
 
 import '../core/routing/routes.dart';
 import '../models/product_model.dart';
@@ -27,6 +29,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         return SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.all(KayanSpacing.md),
+            alignment: Alignment.topCenter,
+            constraints: const BoxConstraints(
+              maxWidth: AppBreakpoints.desktopContentWidth,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -44,9 +50,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                     ),
                   )
                 else
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
+                  ProductGrid(
                     itemCount: favorites.length,
                     itemBuilder: (context, index) {
                       final ProductModel product = favorites[index];

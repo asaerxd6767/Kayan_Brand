@@ -64,14 +64,16 @@ class _SignupScreenState extends State<SignupScreen> {
     final List<String> sizes = ['xs', 's', 'm', 'l', 'xl'];
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.all(25),
-          padding: const EdgeInsets.all(30),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            color: colorTheme.onPrimary,
-          ),
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(KayanSpacing.lg),
+          child: Container(
+            constraints: const BoxConstraints(maxWidth: 460),
+            padding: const EdgeInsets.all(30),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: colorTheme.onPrimary,
+            ),
           child: Column(
             spacing: KayanSpacing.md,
             children: [
@@ -183,6 +185,7 @@ class _SignupScreenState extends State<SignupScreen> {
             ],
           ),
         ),
+      ),
       ),
     );
   }

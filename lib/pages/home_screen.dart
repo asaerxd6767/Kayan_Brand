@@ -3,10 +3,12 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:local_brand/api/firebase_service.dart';
 import 'package:local_brand/core/theme/app_spacing.dart';
+import 'package:local_brand/core/utils/responsive.dart';
 import 'package:local_brand/core/utils/extenstions/capitalized.dart';
 import 'package:local_brand/managers/product_manager.dart';
 import 'package:local_brand/widgets/category_card.dart';
 import 'package:local_brand/widgets/form_field.dart';
+import 'package:local_brand/widgets/product_grid.dart';
 
 import '../core/routing/routes.dart';
 import '../models/product_model.dart';
@@ -60,9 +62,22 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final horizontalMargin = context.isMobile
+        ? KayanSpacing.containerMargin
+        : KayanSpacing.containerMargin * 2;
+
     return SingleChildScrollView(
       child: Container(
-        margin: EdgeInsets.all(KayanSpacing.containerMargin),
+        margin: EdgeInsets.fromLTRB(
+          horizontalMargin,
+          KayanSpacing.containerMargin,
+          horizontalMargin,
+          context.isMobile ? 0 : KayanSpacing.containerMargin,
+        ),
+        constraints: BoxConstraints(
+          maxWidth: AppBreakpoints.desktopContentWidth,
+        ),
+        alignment: Alignment.topCenter,
         child: Form(
           child: Column(
             spacing: KayanSpacing.md,
@@ -153,15 +168,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
 
-                        ListenableBuilder(
+ListenableBuilder(
                           listenable: _manager,
-                          builder: (context, _) => ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
+                          builder: (context, _) => ProductGrid(
                             itemCount: viewAllProduct
                                 ? _manager.allProducts.length
                                 : min(_manager.allProducts.length, 10),
-
                             itemBuilder: (context, index) {
                               final product = _manager.allProducts[index];
                               final isFavorite = _manager.isFavorite(product);

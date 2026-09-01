@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:local_brand/core/utils/responsive.dart';
 
 class KayanAppBar extends StatelessWidget {
   const KayanAppBar({
@@ -15,10 +16,12 @@ class KayanAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      leading: IconButton(
-        onPressed: () => Scaffold.of(context).openDrawer(),
-        icon: const Icon(Icons.menu, size: 25),
-      ),
+      leading: context.isDesktop
+          ? null
+          : IconButton(
+              onPressed: () => Scaffold.of(context).openDrawer(),
+              icon: const Icon(Icons.menu, size: 25),
+            ),
       centerTitle: true,
       title: Text('KAYAN', style: textTheme.headlineLarge),
       actions: [

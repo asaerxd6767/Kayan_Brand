@@ -51,6 +51,12 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
 
+# Workaround for flutterfire#18611: firebase_core_web 3.11.0 requires
+# Dart >= 3.12 (isA on Object), but this project runs Dart 3.11.x.
+# Remove this pin after upgrading Flutter to >= 3.44 (Dart >= 3.12).
+dependency_overrides:
+  firebase_core_web: 3.10.0
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

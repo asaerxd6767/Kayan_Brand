@@ -22,50 +22,54 @@ class CategoryCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: .start,
       children: [
-        Stack(
-          children: [
-            KayanNetworkImage(
-              url: product.image,
-              width: double.infinity,
-              height: 350,
-            ),
+        AspectRatio(
+          aspectRatio: 3 / 4,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              KayanNetworkImage(
+                url: product.image,
+                width: double.infinity,
+                height: double.infinity,
+              ),
 
-            // FAVORITE Button
-            Positioned(
-              top: KayanSpacing.sm,
-              right: KayanSpacing.sm,
-              child: GestureDetector(
-                onTap: onFavoriteTap,
-                child: Container(
-                  padding: const EdgeInsets.all(KayanSpacing.sm),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(999),
-                    color: colorTheme.secondaryContainer,
+              // FAVORITE Button
+              Positioned(
+                top: KayanSpacing.sm,
+                right: KayanSpacing.sm,
+                child: GestureDetector(
+                  onTap: onFavoriteTap,
+                  child: Container(
+                    padding: const EdgeInsets.all(KayanSpacing.sm),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(999),
+                      color: colorTheme.secondaryContainer,
+                    ),
+                    child: isFavorite
+                        ? Icon(Icons.favorite)
+                        : Icon(Icons.favorite_border),
                   ),
-                  child: isFavorite
-                      ? Icon(Icons.favorite)
-                      : Icon(Icons.favorite_border),
                 ),
               ),
-            ),
 
-            // DELETE BUTTON
-            Positioned(
-              top: KayanSpacing.sm,
-              left: KayanSpacing.sm,
-              child: GestureDetector(
-                onTap: onDeleteTap,
-                child: Container(
-                  padding: const EdgeInsets.all(KayanSpacing.sm),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(999),
-                    color: colorTheme.secondaryContainer,
+              // DELETE BUTTON
+              Positioned(
+                top: KayanSpacing.sm,
+                left: KayanSpacing.sm,
+                child: GestureDetector(
+                  onTap: onDeleteTap,
+                  child: Container(
+                    padding: const EdgeInsets.all(KayanSpacing.sm),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(999),
+                      color: colorTheme.secondaryContainer,
+                    ),
+                    child: Icon(Icons.delete, color: colorTheme.error)
                   ),
-                  child: Icon(Icons.delete, color: colorTheme.error)
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
 
         Container(
@@ -77,12 +81,24 @@ class CategoryCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: .spaceBetween,
                 children: [
-                  Text(product.category, style: textTheme.bodySmall),
+                  Flexible(
+                    child: Text(
+                      product.category,
+                      style: textTheme.bodySmall,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                   Text('\$${product.price}', style: textTheme.bodySmall),
                 ],
               ),
 
-              Text(product.name, style: textTheme.headlineMedium),
+              Text(
+                product.name,
+                style: textTheme.headlineMedium,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
             ],
           ),
         ),
